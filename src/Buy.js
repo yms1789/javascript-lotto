@@ -5,6 +5,7 @@ const { BUY_MESSAGE, LOTTO_PRICE, RESULT_MESSAGE } = require("./constants");
 class Buy {
   constructor() {
     this.lottoNumer = {};
+    this.winngingNumber;
   }
   print(message) {
     return Console.print(message);
@@ -34,6 +35,27 @@ class Buy {
     return this.print(`${RESULT_MESSAGE[rank]} - ${winningCount}개`);
   }
 
+  rankCount(lottoNumber, winningNumbers, bonus) {
+    const lottoNums = Object.keys(lottoNumber);
+    let sameCount = 0;
+    let bonusCount = 0;
+    for (let index = 0; i < lottoNums.length; index++) {
+      lottoNums[index].forEach((lottoNumber) =>
+        winningNumbers.indexOf(lottoNumber)
+          ? (sameCount += 1)
+          : (sameCount += 0)
+      );
+      if (lottoNumber.includes(bonus)) bonusCount += 1;
+    }
+    return [sameCount, bonusCount];
+  }
+  rankCheck() {
+    const [sameCount, bonusCount] = this.rankCount(
+      this.lottoNumer,
+      this.winngingNumber,
+      bonus
+    );
+  }
   lottoResult() {
     this.print("\n당첨 통계\n---\n");
     for (let index = 6; i >= 2; index--) {
@@ -43,13 +65,14 @@ class Buy {
 
   inputBonusNum() {
     Console.readLine("\n보너스 번호를 입력해 주세요.\n", (bonus) => {
+      this.rankCheck(bonus);
       this.lottoResult();
     });
   }
 
   inputWinning() {
     Console.readLine("\n당첨 번호를 입력해 주세요.\n", (winning) => {
-      const winningNumbers = winning.split(",").map(Number);
+      this.winngingNumber = winning.split(",").map(Number);
       const lotto = new Lotto(winningNumbers);
       this.inputBonusNum();
     });
