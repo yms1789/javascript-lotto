@@ -1,6 +1,11 @@
 const { Console, Random } = require("@woowacourse/mission-utils");
 const Lotto = require("./Lotto");
-const { BUY_MESSAGE, LOTTO_PRICE, RESULT_MESSAGE } = require("./constants");
+const {
+  BUY_MESSAGE,
+  LOTTO_PRICE,
+  RESULT_MESSAGE,
+  WINNING_AMOUNT,
+} = require("./constants");
 
 class Buy {
   constructor() {
@@ -84,14 +89,25 @@ class Buy {
       this.printResult(index + 1, this.winningCount[index]);
     }
   }
+  calcYield(winningCount, purchase) {
+    let lottoYield = 0;
+    winningCount.forEach((count, index) => {
+      if (count > 0) {
+        lottoYield += plusAmount(count, WINNING_AMOUNT[index + 1]);
+      }
+    });
+    const revenue = ((lottoYield / purchase) * 100).toFixed(2);
+    return this.print(lottoYield);
+  }
 
-  printYield(yield) {
-    this.calcYield();
-    this.print(`총 수익률은 ${yield}%입니다.`);
+  printYield(lottoYield) {
+    this.calcYield(this.winningCount, this.purchase);
+    this.print(`총 수익률은 ${lottoYield}%입니다.`);
   }
   inputBonusNum() {
     Console.readLine("\n보너스 번호를 입력해 주세요.\n", (bonus) => {
       this.rankCheck(bonus);
+      this.calcYield(this.winningCount, this.purchase);
     });
   }
 
