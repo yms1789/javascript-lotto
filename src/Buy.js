@@ -4,6 +4,7 @@ const { BUY_MESSAGE, LOTTO_PRICE, RESULT_MESSAGE } = require("./constants");
 
 class Buy {
   constructor() {
+    this.purchase;
     this.lottoNumer = [];
     this.winngingNumber;
     this.winningCount = Array(5).fill(0);
@@ -84,6 +85,10 @@ class Buy {
     }
   }
 
+  printYield(yield) {
+    this.calcYield();
+    this.print(`총 수익률은 ${yield}%입니다.`);
+  }
   inputBonusNum() {
     Console.readLine("\n보너스 번호를 입력해 주세요.\n", (bonus) => {
       this.rankCheck(bonus);
@@ -99,6 +104,7 @@ class Buy {
   }
   start() {
     Console.readLine("로또 구입 금액을 입력하세요.\n", (money) => {
+      this.purchase = money;
       this.printLottoCount(money);
       this.lottoPublish(money);
       this.inputWinning();
