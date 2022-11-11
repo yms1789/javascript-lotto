@@ -1,10 +1,10 @@
 const { Console, Random } = require("@woowacourse/mission-utils");
 const Lotto = require("./Lotto");
-const { BUY_MESSAGE, LOTTO_PRICE } = require("./constants");
+const { BUY_MESSAGE, LOTTO_PRICE, RESULT_MESSAGE } = require("./constants");
 
 class Buy {
   constructor() {
-    this.lottoNumer = [];
+    this.lottoNumer = {};
   }
   print(message) {
     return Console.print(message);
@@ -25,12 +25,21 @@ class Buy {
 
     for (let i = 0; i < buyLottoCount; i++) {
       let lottoNums = Random.pickUniqueNumbersInRange(1, 45, 6).sort();
-      this.lottoNumer.push(lottoNums);
+      this.lottoNumer[lottoNums] = 0;
       this.printLottoDetails(lottoNums);
     }
   }
 
-  lottoResult() {}
+  printResult(rank, winningCount) {
+    return this.print(`${RESULT_MESSAGE[rank]} - ${winningCount}개`);
+  }
+
+  lottoResult() {
+    this.print("\n당첨 통계\n---\n");
+    for (let index = 6; i >= 2; index--) {
+      this.printResult(index, winningCount);
+    }
+  }
 
   inputBonusNum() {
     Console.readLine("\n보너스 번호를 입력해 주세요.\n", (bonus) => {
