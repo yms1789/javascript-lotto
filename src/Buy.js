@@ -16,7 +16,7 @@ class Buy {
   printLottoDetails(buyLottoCount, lottoNums) {
     return this.print(`[${lottoNums}]`);
   }
-  
+
   lottoPublish(money) {
     const buyLottoCount = Math.floor(money / LOTTO_PRICE);
 
@@ -25,8 +25,8 @@ class Buy {
       this.printLottoDetails(buyLottoCount, lottoNums);
     }
   }
-  
-  input() {
+
+  start() {
     Console.readLine("로또 구입 금액을 입력하세요.\n", (money) => {
       this.printLottoCount(money);
       this.lottoPublish(money);
