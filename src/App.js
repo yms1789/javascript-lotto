@@ -2,7 +2,7 @@ const Buy = require("./Buy");
 class App {
   play() {
     const buy = new Buy();
-    buy.input();
+    buy.start();
   }
 }
 
