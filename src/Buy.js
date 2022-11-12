@@ -19,42 +19,44 @@ class Buy {
   }
 
   printLottoCount(money) {
-    return this.print(
-      `\n${Math.floor(money / LOTTO_PRICE)} ${BUY_MESSAGE.BUY}`
-    );
+    return this.print(`${Math.floor(money / LOTTO_PRICE)}${BUY_MESSAGE.BUY}`);
   }
 
   printLottoDetails(lottoNums) {
-    return this.print(`[${lottoNums}]`);
+    let printNums = '"[' + lottoNums.join(", ").trim() + ']"';
+    return this.print(printNums);
   }
 
   lottoPublish(money) {
     const buyLottoCount = Math.floor(money / LOTTO_PRICE);
-
     for (let index = 0; index < buyLottoCount; index++) {
-      let lottoNums = Random.pickUniqueNumbersInRange(1, 45, 6).sort();
+      let lottoNums = Random.pickUniqueNumbersInRange(1, 45, 6).sort(
+        (a, b) => a - b
+      );
       this.lottoNumer.push(lottoNums);
       this.printLottoDetails(lottoNums);
     }
   }
 
   printResult(rank, winningCount) {
+    // console.log(this.winningCount);
     return this.print(`${RESULT_MESSAGE[rank]} - ${winningCount}개`);
   }
 
   rankCount(lottoNumber, winningNumbers, bonus) {
     let sameCount = 0;
     let bonusCount = 0;
-    console.log(lottoNumber, winningNumbers, bonus);
+    // console.log(lottoNumber, winningNumbers, bonus);
     lottoNumber.forEach((number) =>
       winningNumbers.indexOf(number) > -1 ? (sameCount += 1) : (sameCount += 0)
     );
     if (lottoNumber.includes(bonus)) bonusCount += 1;
+    // console.log(`same: ${sameCount}, bonus: ${bonusCount}`);
     return [sameCount, bonusCount];
   }
   rankCheck(bonus) {
-    let rank = 0;
     for (let index = 0; index < this.lottoNumer.length; index++) {
+      let rank = 0;
       const [sameCount, bonusCount] = this.rankCount(
         this.lottoNumer[index],
         this.winngingNumber,
@@ -84,35 +86,35 @@ class Buy {
     return this.lottoResult();
   }
   lottoResult() {
-    this.print("\n당첨 통계\n---");
-    for (let index = 0; index < 5; index++) {
+    for (let index = 4; index >= 0; index--) {
       this.printResult(index + 1, this.winningCount[index]);
     }
   }
+
   calcYield(winningCount, purchase) {
     let lottoYield = 0;
-    winningCount.forEach((count, index) => {
-      if (count > 0) {
-        lottoYield += plusAmount(count, WINNING_AMOUNT[index + 1]);
+    for (let index = 0; index < winningCount.length; index++) {
+      if (winningCount[index] > 0) {
+        lottoYield += winningCount[index] * WINNING_AMOUNT[index + 1];
       }
-    });
-    const revenue = ((lottoYield / purchase) * 100).toFixed(2);
-    return this.print(lottoYield);
+    }
+    const revenue = ((lottoYield / purchase) * 100).toFixed(1);
+    return this.printYield(revenue);
   }
 
   printYield(lottoYield) {
-    this.calcYield(this.winningCount, this.purchase);
     this.print(`총 수익률은 ${lottoYield}%입니다.`);
+    Console.close();
   }
   inputBonusNum() {
-    Console.readLine("\n보너스 번호를 입력해 주세요.\n", (bonus) => {
+    Console.readLine("보너스 번호를 입력해 주세요.\n", (bonus) => {
       this.rankCheck(bonus);
       this.calcYield(this.winningCount, this.purchase);
     });
   }
 
   inputWinning() {
-    Console.readLine("\n당첨 번호를 입력해 주세요.\n", (winning) => {
+    Console.readLine("당첨 번호를 입력해 주세요.\n", (winning) => {
       const lotto = new Lotto(winning.split(",").map(Number));
       this.winngingNumber = winning.split(",").map(Number);
       this.inputBonusNum();
@@ -120,9 +122,10 @@ class Buy {
   }
   start() {
     Console.readLine("로또 구입 금액을 입력하세요.\n", (money) => {
+      this.validatePurchaseAmount(money);
       this.purchase = money;
       this.printLottoCount(money);
-      this.lottoPublish(money);
+      this.lottoPublish(this.purchase);
       this.inputWinning();
     });
   }
