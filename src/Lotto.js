@@ -6,7 +6,7 @@ class Lotto {
     this.validate(numbers);
     this.#numbers = numbers;
   }
-  
+
   validate(numbers) {
     if (numbers.length !== 6) {
       throw new Error("[ERROR] 로또 번호는 6개여야 합니다.");
@@ -16,6 +16,9 @@ class Lotto {
         throw new Error("[ERROR] 로또 번호의 숫자 범위는 1 ~ 45까지 입니다.");
       }
     });
+    if ([...new Set(numbers)].length !== 6) {
+      throw new Error("[ERROR] 로또 번호는 중복되지 않아야 합니다.");
+    }
   }
 }
 module.exports = Lotto;
