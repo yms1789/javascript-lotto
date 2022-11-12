@@ -106,6 +106,11 @@ class Buy {
     this.print(`총 수익률은 ${lottoYield}%입니다.`);
     Console.close();
   }
+  validatePurchaseAmount(money) {
+    if (money % 1000 !== 0) {
+      throw new Error("[ERROR] 구입 금액은 1000원 단위의 숫자이어야 합니다.");
+    }
+  }
   inputBonusNum() {
     Console.readLine("보너스 번호를 입력해 주세요.\n", (bonus) => {
       this.rankCheck(bonus);
