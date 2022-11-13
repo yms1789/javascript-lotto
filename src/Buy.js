@@ -17,9 +17,12 @@ class Buy {
   print(message) {
     return Console.print(message);
   }
-
+  lottoCount(money) {
+    return Math.floor(money / LOTTO_PRICE);
+  }
   printLottoCount(money) {
-    return this.print(`${Math.floor(money / LOTTO_PRICE)}${BUY_MESSAGE.BUY}`);
+    const lottto = this.lottoCount(money);
+    return this.print(`${lottto}${BUY_MESSAGE.BUY}`);
   }
 
   printLottoDetails(lottoNums) {
