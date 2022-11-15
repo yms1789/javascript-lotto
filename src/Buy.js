@@ -5,6 +5,7 @@ const {
   LOTTO_PRICE,
   RESULT_MESSAGE,
   WINNING_AMOUNT,
+  RANK,
 } = require("./constants");
 
 class Buy {
@@ -57,6 +58,7 @@ class Buy {
     // console.log(`same: ${sameCount}, bonus: ${bonusCount}`);
     return [sameCount, bonusCount];
   }
+
   rankCheck(bonus) {
     for (let index = 0; index < this.lottoNumer.length; index++) {
       let rank = 0;
@@ -65,29 +67,14 @@ class Buy {
         this.winngingNumber,
         bonus
       );
-      switch (true) {
-        case sameCount === 6:
-          rank = 1;
-          break;
-        case sameCount === 5 && bonusCount === 1:
-          rank = 2;
-          break;
-        case sameCount === 5:
-          rank = 3;
-          break;
-        case sameCount === 4:
-          rank = 4;
-          break;
-        case sameCount === 3:
-          rank = 5;
-          break;
-        default:
-          break;
-      }
+      const comparRank = `${sameCount}${bonusCount}`;
+      rank = RANK[Number(comparRank)];
+      rank === undefined ? (rank = 0) : rank;
       this.winningCount[rank - 1] += 1;
     }
     return this.lottoResult();
   }
+
   lottoResult() {
     for (let index = 4; index >= 0; index--) {
       this.printResult(index + 1, this.winningCount[index]);
