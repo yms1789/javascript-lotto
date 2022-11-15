@@ -20,4 +20,18 @@ const WINNING_AMOUNT = Object.freeze({
   5: 5000,
 });
 
-module.exports = { BUY_MESSAGE, LOTTO_PRICE, RESULT_MESSAGE, WINNING_AMOUNT };
+const RANK = Object.freeze({
+  60: 1,
+  51: 2,
+  50: 3,
+  40: 4,
+  30: 5,
+});
+
+module.exports = {
+  BUY_MESSAGE,
+  LOTTO_PRICE,
+  RESULT_MESSAGE,
+  WINNING_AMOUNT,
+  RANK,
+};
